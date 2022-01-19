@@ -4,39 +4,52 @@ import { WorkToDo } from '../FormShema/WorkToDo'
 
 export const TodoScreen = () => {
     const [workList, setWorkList] = useState([]);
+    const [countWorkDone, setContWorkDone] = useState([]);
     const [statusNum, setStatusNum] = useState(true);
 
     const todoDone = (event) => {
-        console.log(event.target.value)
         let id = event.target.value
-        let completeTodo = workList.forEach((e) => {
+        workList.forEach((e) => {
             if (e.id === Number(id)) {
                 e.status = !e.status;
             }
         })
-        console.log(workList)
+        
         setWorkList(workList)
-        setStatusNum(pre => !statusNum);
+        setStatusNum(prev => prev = !statusNum)
+        let arr = [];
+        workList.forEach((eventVal) => {
+            if(eventVal.status === true){
+                arr.push(event.status)
+            }
+        })
+        setContWorkDone(arr)
+        // console.log(countWorkDone.length)
     }
+
+
 
     return (
         <div className='bg-green-300 p-10'>
+            {console.log(countWorkDone.length)}
             {workList.length === 0 ? <div><text>Looks like you are absoluteky free today!</text></div> :
                 <div>{workList.map(e => (
                     <div key={e.id}>
-                        {console.log(e.status, e.value)}
                         <input value={e.id} type="checkbox" onClick={todoDone}
                         />
                         {e.status ?
                             <span className='line-through'>{e.value}</span>
                             :
                             <span>{e.value}</span>}
+                        {/* <Icon type  /> */}
                     </div>
                 ))}</div>}
             <div className='flex justify-center'>
-                <text className='text-xl'>
-                    DONE:
-                </text>
+                {countWorkDone.length <= 0 ?
+                    <text>DONE:</text>
+                    :
+                    <text>DONE: {countWorkDone.length}</text>
+                }
             </div>
             <Formik
                 initialValues={{
