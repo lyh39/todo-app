@@ -17,6 +17,7 @@ This Application has a few basic requirements for local development:
 
 - Install all packages: `npm install`
 - Run in terminal `npm start`
+- To create tailwind.css file `npm run tailwind:build`
 - Navigate to https://localhost:3000
 
 ### Adding New Libraries
