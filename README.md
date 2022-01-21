@@ -8,20 +8,23 @@
 * [Files and folders](#files-and-folders)
 
 ## Intro and General Requirements
-
 This Application has a few basic requirements for local development:
-
 - [Node version 14+](https://github.com/nvm-sh/nvm)
 
-### Quick Start
+### Prerequisite
+[Install NodeJS on macOS, Linux, Windows](https://nodejs.org/en/download/)
 
+Install using command line:
+- On macOS (using brew): `brew install node`
+- On Linux (using snap): `sudo snap install node --classic`
+
+### Quick Start
 - Install all packages: `npm install`
 - Run in terminal `npm start`
 - To create tailwind.css file `npm run tailwind:build`
 - Navigate to https://localhost:3000
 
 ### Adding New Libraries
-
 ```
 npm install <dependency>
 ```
@@ -41,8 +44,6 @@ npm install <dependency>
 
 ## State Management
 [Hooks](https://reactjs.org/docs/hooks-intro.html)
-
-
 
 ## Files and Folders
 ```js
