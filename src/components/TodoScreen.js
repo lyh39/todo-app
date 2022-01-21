@@ -1,44 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { WorkToDo } from '../FormShema/WorkToDo';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const TodoScreen = () => {
     const [workList, setWorkList] = useState([]);
-    const [countWorkDone, setContWorkDone] = useState([]);
+    const [counter, setCounter] = useState(0);
+
+    const counterFunction = () => {
+        let count = 0;
+        workList.forEach((ele) => {
+            if (ele.status) {
+                count = count + 1;
+            }
+        })
+        setCounter(count);
+    }
+
+    useEffect(() => {
+        counterFunction();
+    }, [workList])
 
     const todoDone = (event) => {
         let id = event.target.value;
-        let arr = [];
         workList.forEach((e) => {
             if (e.id === Number(id)) {
                 e.status = !e.status;
             };
         });
         setWorkList(workList);
-        workList.forEach((eventVal) => {
-            if (eventVal.status === true) {
-                arr.push({ id: eventVal.id, status: eventVal.status });
-            };
-        });
-        setContWorkDone(arr);
+        counterFunction();
     };
 
     const removeTodo = (event) => {
         let arr = [];
-        let arrCount = [];
         workList.filter((idVal) => {
             if (event !== idVal.id) {
                 arr.push(idVal);
             };
         });
         setWorkList(arr);
-        countWorkDone.filter((ival) => {
-            if (event !== ival.id) {
-                arrCount.push(ival);
-            };
-        });
-        setContWorkDone(arrCount);
     };
 
 
@@ -50,7 +51,7 @@ export const TodoScreen = () => {
                 <div className='border-b border-slate-300 pb-4'>{workList.map(e => (
                     <div className='flex justify-between pt-1 pb-1' key={e.id}>
                         <div>
-                            <input className='mr-2 focus:ring-0' style={{height:12, width:12}} value={e.id} type="checkbox" onClick={todoDone}
+                            <input className='mr-2 focus:ring-0' style={{ height: 12, width: 12 }} value={e.id} type="checkbox" onClick={todoDone}
                             />
                             {e.status ?
                                 <span className='line-through text-sm'>{e.value}</span>
@@ -59,7 +60,7 @@ export const TodoScreen = () => {
                         </div>
                         <div>
                             <button onClick={() => removeTodo(e.id)}>
-                                <CloseIcon style={{fontSize: 14}} className='bg-grey-200' />
+                                <CloseIcon style={{ fontSize: 14 }} className='bg-grey-200' />
                             </button>
                         </div>
                     </div>
@@ -68,7 +69,7 @@ export const TodoScreen = () => {
                 </div>
             }
             <div className='flex justify-center mt-2'>
-                {countWorkDone.length <= 0 ? <text>DONE:</text> : <text>DONE: {countWorkDone.length}</text>}
+                <text>DONE:{counter}</text>
             </div>
             <Formik
                 initialValues={{
