@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { WorkToDo } from '../FormShema/WorkToDo';
+import { connect } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setTodoName, setRemoveName } from '../actions/incrementAction'
 
 export const TodoScreen = () => {
-    const [workList, setWorkList] = useState([]);
+    const myState = useSelector((state) => state.changeTodoName.todoName);
+    const dispatch = useDispatch();
     const [counter, setCounter] = useState(0);
+    // const [workList, setWorkList] = useState([]);
+    // const [valuesName, setValuesName] = useState();
+
 
     const counterFunction = () => {
         let count = 0;
-        workList.forEach((ele) => {
+        myState.forEach((ele) => {
             if (ele.status) {
                 count = count + 1;
             }
@@ -19,36 +27,36 @@ export const TodoScreen = () => {
 
     useEffect(() => {
         counterFunction();
-    }, [workList])
+    }, [myState])
 
     const todoDone = (event) => {
         let id = event.target.value;
-        workList.forEach((e) => {
+        myState.forEach((e) => {
             if (e.id === Number(id)) {
                 e.status = !e.status;
             };
         });
-        setWorkList(workList);
+        setTodoName(myState);
         counterFunction();
     };
 
     const removeTodo = (event) => {
         let arr = [];
-        workList.filter((idVal) => {
+        myState.filter((idVal) => {
             if (event !== idVal.id) {
-                arr.push(idVal);
+                arr.push(idVal)
             };
         });
-        setWorkList(arr);
+        dispatch(setRemoveName(arr));
     };
 
 
     return (
         <div className='py-4'>
-            {workList.length === 0 ?
+            {myState.length === 0 ?
                 <div className='flex justify-center text-sm border-b border-slate-300 w-full pb-4'><text className='text-grey-400'>Looks like you are absoluteky free today!</text></div>
                 :
-                <div className='border-b border-slate-300 pb-4'>{workList.map(e => (
+                <div className='border-b border-slate-300 pb-4'>{myState.map(e => (
                     <div className='flex justify-between pt-1 pb-1' key={e.id}>
                         <div>
                             <input className='mr-2 focus:ring-0' style={{ height: 12, width: 12 }} value={e.id} type="checkbox" onClick={todoDone}
@@ -71,6 +79,9 @@ export const TodoScreen = () => {
             <div className='flex justify-center mt-2'>
                 <text>DONE:{counter}</text>
             </div>
+            {/* <>
+                <input type="text" value={valuesName} onChange={(e) => setValuesName(e.target.value)} />
+            </> */}
             <Formik
                 initialValues={{
                     todoName: ""
@@ -78,7 +89,8 @@ export const TodoScreen = () => {
                 validateOnBlur
                 validationSchema={WorkToDo}
                 onSubmit={(values, { resetForm }) => {
-                    setWorkList([...workList, { id: workList.length, value: values.todoName, status: false }]);
+                    // let value = dispatch(setTodoName(values.todoName))
+                    dispatch(setTodoName({ id: myState.length, value: values.todoName, status: false }));
                     resetForm({ values: '' })
                 }}
             >
@@ -105,3 +117,11 @@ export const TodoScreen = () => {
         </div >
     );
 };
+
+// function mapStateProps(state) {
+//     return {
+//         counterCred: state.changeTodoName.todoName
+//     }
+// }
+
+// export default connect(mapStateProps)(TodoScreen);
